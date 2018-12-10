@@ -1,0 +1,49 @@
+function _(el) {
+  return document.getElementById(el);
+}
+
+function uploadFile() {
+  document.getElementById("loaded_n_total").style.visibility = "visible";
+  //document.getElementById("status").style.visibility = "visible";
+  var file = _("file1").files[0];
+  // alert(file.name+" | "+file.size+" | "+file.type);
+  var formdata = new FormData();
+  formdata.append("file1", file);
+  var ajax = new XMLHttpRequest();
+  ajax.upload.addEventListener("progress", progressHandler, false);
+  ajax.addEventListener("load", completeHandler, false);
+  ajax.addEventListener("error", errorHandler, false);
+  ajax.addEventListener("abort", abortHandler, false);
+  ajax.open("POST", "upload.php");
+  ajax.send(formdata);
+}
+
+function progressHandler(event) {
+  var percent = (event.loaded / event.total) * 100;
+  _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total + "  (" + Math.round(percent) + "%)";
+}
+
+function completeHandler(event) {
+  _("progressStatus").innerHTML = event.target.responseText;
+  document.getElementById("progressStatus").style.visibility = "visible";
+}
+
+function errorHandler(event) {
+  _("loaded_n_total").innerHTML = "Upload Failed";
+}
+
+function abortHandler(event) {
+  _("loaded_n_total").innerHTML = "Upload Aborted";
+}
+
+function resetHandler() {
+
+  var repodir = document.getElementById("repodir");
+  var repovalue = repodir.options[repodir.selectedIndex].value;
+  _("filename").innerHTML = repovalue.options[repovalue.selectedIndex].value;
+  //_("filename").innerHTML = document.getElementById("file1").files[0].name;
+  _("loaded_n_total").innerHTML = "";
+  _("progressStatus").innerHTML = "";
+  document.getElementById("loaded_n_total").style.visibility = "hidden";
+  document.getElementById("progressStatus").style.visibility = "hidden";
+}
