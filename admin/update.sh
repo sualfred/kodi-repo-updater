@@ -40,7 +40,7 @@ generate_repo() {
         for name in $(find . -maxdepth 1 -type d | grep -v \.git | grep -v addons | egrep -v "^\.$" | cut -d \/ -f 2); do
             	if [ -f "$name/addon.xml" ]; then
                 	#VERSION=$(cat $name/addon.xml | grep \<addon | grep $name | tr 'A-Z' 'a-z' | sed 's/.*version="\([^"]*\)"*.*/\1/g')
-			VERSION=`cat $name/addon.xml | sed '/?xml/d' | sed '/<import/d' | grep version= | sed -n 1p | sed 's/.*version="\([^"]*\)"*.*/\1/g'`
+			VERSION=$(cat $name/addon.xml | sed '/?xml/d' | sed '/<import/d' | grep version= | sed -n 1p | sed 's/.*version="\([^"]*\)"*.*/\1/g')
 	                if [ ! -f "$name/$name-$VERSION.zip" ]; then
                		        echo "Create: $kodibuild/$name-$VERSION.zip"
 	                        zip -r "$name/$name-$VERSION.zip" "$name" -x \*.zip -x \*.git -x \*.psd -x \*.pyo -x \*.gitignore >/dev/null 2>&1
